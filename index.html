@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <title>火柴人快打 - Stickman Fighter</title>
+    <script type="importmap">
+      {
+        "imports": {
+          "phaser": "https://esm.sh/phaser@3.70.0"
+        }
+      }
+    </script>
+    <!-- 引入TapTap SDK -->
+    <script src="https://sdk.taptap.com/tapsdk.js"></script>
+    <style>
+      /* 保持原有样式 */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        background: #000;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      }
+      
+      #phaser-game-container {
+        width: 100vw;
+        height: 100vh;
+      }
+      
+      /* TapTap登录按钮样式 */
+      #taptap-login-btn {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+        padding: 10px 20px;
+        background-color: #00b42a;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="phaser-game-container"></div>
+    <!-- TapTap登录按钮 -->
+    <button id="taptap-login-btn">TapTap登录</button>
+    <script type="module" src="main.js"></script>
+    <script src="https://storage.googleapis.com/rosebud_staticfiles/ChatManager.js"></script>
+    <script src="https://storage.googleapis.com/rosebud_staticfiles/ImageGenerator.js"></script>
+    <script src="https://storage.googleapis.com/rosebud_staticfiles/ProgressLogger.js"></script>
+    <script src="https://storage.googleapis.com/rosebud_staticfiles/OGP.js"></script>
+    
+    <!-- 初始化TapTap SDK -->
+    <script>
+      // 初始化TapTap SDK
+      TapTap.init({
+        clientId: '你的TapTap应用ClientID', // 替换为你的应用ClientID
+        gameServerUrl: '你的游戏服务器地址' // 如果需要
+      });
+      
+      // 登录按钮事件
+      document.getElementById('taptap-login-btn').addEventListener('click', function() {
+        TapTap.login().then(result => {
+          if (result.isSuccess) {
+            console.log('TapTap登录成功', result.data);
+            // 保存用户信息到本地存储
+            localStorage.setItem('taptapUser', JSON.stringify(result.data));
+            // 通知游戏登录状态已更新
+            window.dispatchEvent(new Event('taptapLoginSuccess'));
+          } else {
+            console.log('TapTap登录失败', result.message);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
